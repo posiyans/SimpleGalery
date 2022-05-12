@@ -15,11 +15,15 @@ class CreateMediaFileModelsTable extends Migration
     {
         Schema::create('media_file_models', function (Blueprint $table) {
             $table->id();
+            $table->integer('gallery_id')->comment('id галереи');
             $table->string('hash')->nullable()->comment('хеш файла');
-            $table->string('path')->comment('путь к файлу');
+            $table->string('path')->unique()->comment('путь к файлу');
             $table->string('type')->comment('тип файла');
             $table->string('size')->comment('размер файла');
             $table->string('name')->comment('имя файла');
+            $table->string('user_id')->nullable()->comment('кто загрузил файл');
+            $table->timestamp('date')->nullable()->comment('дата создания файла');
+            $table->json('exif')->default(null)->comment('exif файла');
             $table->timestamps();
         });
     }

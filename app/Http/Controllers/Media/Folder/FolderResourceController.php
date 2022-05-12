@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Media\Folder;
 
 use App\Http\Controllers\Controller;
+use App\Http\Repositories\Media\Folder\FolderAndChildrenRepository;
 use App\Http\Repositories\Media\Folder\FolderRepository;
+use App\Models\Media\MediaDirModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FolderResourceController extends Controller
 {
@@ -15,7 +18,8 @@ class FolderResourceController extends Controller
      */
     public function index()
     {
-        $data = (new FolderRepository())->getList();
+//        $data = (new FolderRepository())->getList();
+        $data = FolderAndChildrenRepository::all();
         return $data;
     }
 
@@ -37,7 +41,16 @@ class FolderResourceController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+        $path = $request->path;
+        $model = new MediaDirModel();
+        $model->path = $path;
+        $name = explode('/', $path);
+        $model->name = end($name);
+        if ($model->save()) {
+            Storage::makeDirectory($path);
+            return $model;
+        }
+        return false;
     }
 
     /**
@@ -48,7 +61,8 @@ class FolderResourceController extends Controller
      */
     public function show($id)
     {
-        //
+        $gallery = MediaDirModel::find($id);
+        return $gallery;
     }
 
     /**
@@ -82,6 +96,12 @@ class FolderResourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $gallery = MediaDirModel::find($id);
+       $images = Storage::allFiles($gallery->path);
+       if (count($images) == 0 ) {
+           Storage::deleteDirectory($gallery->path);
+       }
+       $gallery->delete();
+       return true;
     }
 }

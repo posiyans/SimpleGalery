@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Media\MediaDirModel;
 use Illuminate\Http\Request;
 
+/**
+ * @deprecated
+ */
 class FolderRepository
 {
 
@@ -20,8 +23,8 @@ class FolderRepository
 
     public function getList()
     {
-
         return $this->model->get();
     }
+
 
 }

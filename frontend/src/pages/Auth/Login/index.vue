@@ -204,7 +204,8 @@ export default {
             remember: true
           }
           this.$store.dispatch('user/login', data)
-            .then(() => {
+            .then(res => {
+              console.log(res)
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })

@@ -1,46 +1,33 @@
+import { userModel } from 'src/hooks/userModel/userModel'
 export default ({ app, router, store, Vue }) => {
-  const whiteList = ['/auth/login', '/auth/redirect'] // no redirect whitelist
+  userModel(store, router)
+  const whiteList = ['/auth/login', '/auth/login-by-token', '/auth/redirect'] // no redirect whitelist
   router.beforeEach(async (to, from, next) => {
-    console.log('to')
-    console.log(to.path)
-    console.log('from')
-    console.log(from.path)
-    const user = store.state.user.info
-    console.log('user')
-    console.log(user)
-    if (user) {
-      if (user.role === 'guest') {
-        if (whiteList.indexOf(to.path) !== -1) {
-          // in the free login whitelist, go directly
-          next()
-        } else {
-          next(`/auth/login?redirect=${to.path}`)
+    let user = store.state.user.info
+    if (!user) {
+      try {
+        user = await store.dispatch('user/getInfo')
+      } catch (error) {
+        const code = error.response.status
+        if (code === 401 || code === 419) {
+          await store.dispatch('user/resetToken')
+          store.commit('user/setInfo', { role: 'guest' })
+          next('/auth/login')
         }
+      }
+    }
+    if (user.role === 'guest') {
+      if (whiteList.indexOf(to.path) !== -1) {
+        next()
       } else {
-        if (to.path === '/auth/login') {
-          next({ path: '/' })
-        } else {
-          next()
-        }
+        next('/auth/login')
       }
     } else {
-      const { role } = await store.dispatch('user/getInfo')
-      if (role === 'guest') {
-        next(`/auth/login?redirect=${to.path}`)
+      if (whiteList.indexOf(to.path) === -1) {
+        next()
       } else {
-        next({ ...to, replace: true })
+        next({ path: '/' })
       }
-      // try {
-      //   const r = await store.dispatch('user/getInfo')
-      //   console.log('r')
-      //   console.log(r)
-      //   next({ ...to, replace: true })
-      // } catch (error) {
-      //   // remove token and go to login page to re-login
-      //   // await store.dispatch('user/resetToken')
-      //   console.log(error)
-      //   // next(`/login?redirect=${to.path}`)
-      // }
     }
   })
 }

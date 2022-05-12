@@ -6,25 +6,29 @@
   "author": "posiyans <posiyans@gmail.com>",
   "private": true,
   "scripts": {
+    "dev": "export  NODE_OPTIONS=--openssl-legacy-provider && quasar dev",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && quasar build",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.12.4",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "quasar": "^2.0.0-beta.1"
+    "quasar": "^2.4.12",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app": "^3.0.0-beta.1",
+    "@quasar/app": "^3.2.9",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-webpack-plugin": "^2.4.0",
+    "quasar-app-extension-ide-helper": "^1.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Media\Folder;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GetFolderTreeController extends Controller
 {
@@ -24,9 +25,18 @@ class GetFolderTreeController extends Controller
      */
     public function get(Request $request)
     {
-        $folder = $request->get('folder', '/home/posiyans');
-        $data = $this->getNode($folder);
+        $primary_folder = $request->get('folder', '/');
+        $folders = Storage::directories($primary_folder);
+//        $data = $this->getNode($folder);
 //        $data = $this->viewTree('/home/posiyans/', ' ');
+        $data = [];
+        foreach ($folders as $folder) {
+            $label = explode('/',$folder);
+            $data[] = [
+                'label' => end($label),
+                'path' => '/' . $folder
+            ];
+        }
         return $data;
     }
 

@@ -7,6 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -47,7 +49,7 @@ class LoginController extends Controller
      */
     public function username()
     {
-        return 'name';
+        return 'email';
     }
 
     /**
@@ -68,12 +70,12 @@ class LoginController extends Controller
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
             return $this->sendLockoutResponse($request);
         }
 
         if ($this->attemptLogin($request)) {
-            return $this->sendLoginResponse($request);
+            $token = $request->user()->createToken('primary');
+            return ['token' => $token->plainTextToken];
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
@@ -111,16 +113,11 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $this->guard()->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        if ($response = $this->loggedOut($request)) {
-            return $response;
-        }
-
-        return true;
+//        $tokenId = Str::before(request()->bearerToken(), '|');
+//        if ($tokenId) {
+//            $request->user()->tokens()->where('id', $tokenId)->delete();
+//        }
+        Auth::guard('web')->logout();
+        return response()->json('', 204);
     }
 }

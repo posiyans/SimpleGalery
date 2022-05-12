@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class MediaDirModel extends Model
 {
     use HasFactory;
+
+
 }

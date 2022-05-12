@@ -22,7 +22,8 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
-      'main'
+      'main',
+      'use'
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -47,10 +48,11 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
+      // vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
         BASE_API: ctx.dev
-          ? 'http://localhost'
-          : 'http://localhost'
+          ? 'http://192.168.78.241'
+          : ''
       },
       // transpile: false,
 
@@ -79,7 +81,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8080,
+      port: 9080,
       open: true // opens browser window automatically
     },
 
@@ -99,7 +101,9 @@ module.exports = configure(function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Dialog',
+        'AppFullscreen'
       ]
     },
 
@@ -144,9 +148,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Galery',
-        short_name: 'Galery',
-        description: 'Galery',
+        name: 'Gallery',
+        short_name: 'Gallery',
+        description: 'Gallery',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

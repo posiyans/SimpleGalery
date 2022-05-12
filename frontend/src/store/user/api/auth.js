@@ -16,6 +16,14 @@ export function userLogin(data) {
   })
 }
 
+export function checkRegToken(data) {
+  return request({
+    url: '/api/v1/auth/check-token',
+    method: 'post',
+    data: data
+  })
+}
+
 export function myInfo() {
   return request({
     url: '/api/v1/auth/info',

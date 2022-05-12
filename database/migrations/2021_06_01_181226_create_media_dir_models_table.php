@@ -16,6 +16,10 @@ class CreateMediaDirModelsTable extends Migration
         Schema::create('media_dir_models', function (Blueprint $table) {
             $table->id();
             $table->string('path')->comment('путь к директории для сканирования');
+            $table->string('name')->nullable()->comment('Название галереи');
+            $table->integer('parent_id')->nullable()->comment('Id родительской галереи');
+            $table->integer('user_id')->nullable()->comment('Id пользователя');
+            $table->string('access')->default('private')->comment('тип доступа');
             $table->timestamps();
         });
     }

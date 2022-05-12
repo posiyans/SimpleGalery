@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { LocalStorage } from 'quasar'
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.BASE_API, // url = base url + request url
@@ -9,6 +11,9 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    const token = LocalStorage.getItem('user_token')
+    config.headers.Authorization = 'Bearer ' + token
+    // api.defaults.headers.post['Content-Type'] = 'application/json';
     return config
   },
   error => {
